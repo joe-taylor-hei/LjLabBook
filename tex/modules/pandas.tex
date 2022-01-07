@@ -163,6 +163,14 @@ perform an aggregation function on the remaining columns.
 
 \newpage
 
+Windows:
+\begin{easylist}[itemize]
+\ListProperties(Style*=$\bullet$ , FinalMark={)})
+& \texttt{df.A.shift(3)} ~-- shift entire column \textit{down} by 3 rows.
+& \texttt{df.A.rolling(5).mean()} ~-- apply function to previous 4+1 rows.
+\end{easylist}
+\vspace{\baselineskip}
+
 Plotting:
 \begin{easylist}[itemize]
 \ListProperties(Style*=$\bullet$ , FinalMark={)})
@@ -185,6 +193,8 @@ Miscellaneous:
 & \texttt{df.drop([\textquotesingle A\textquotesingle, \textquotesingle B\textquotesingle], axis=1)} ~-- drop columns.
 & \texttt{df.reindex(columns=[\textquotesingle D\textquotesingle, \textquotesingle A\textquotesingle, \textquotesingle B\textquotesingle])} ~-- select and order columns.
 & \texttt{df.rename(\{\textquotesingle a\textquotesingle:\textquotesingle X\textquotesingle, \textquotesingle b\textquotesingle:\textquotesingle Y\textquotesingle\}, axis=1)} ~-- change column names.\newline
+& \texttt{df.replace(1, 100)} ~-- replace first value with second value.
+& \texttt{df.A.clip(lower=18, upper=65)} ~-- clip column values.\newline
 & \texttt{corr\char`_matrix = df.corr()} ~-- create a correlation matrix.
 
 \end{easylist}
