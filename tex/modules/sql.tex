@@ -105,4 +105,13 @@ ORDER BY = applying function sequentially, ordered by...
 
 \texttt{ROW\char`_NUMBER() OVER (PARTITION BY enq\char`_id ORDER BY sequence) AS risn}
 
+\vspace{\baselineskip}
+Creating a local MySQL database from the command line:\newline
+\texttt{mysql --host=localhost -u root -p}\newline
+\texttt{> create database football\char`_epts;}\newline
+\texttt{> show databases;}\newline\newline
+\texttt{mysql -u root -p football\char`_epts < session\char`_contexts.sql}\newline
+\texttt{mysql -u root -p football\char`_epts < session\char`_files.sql}\newline
+\texttt{mysql -u root -p football\char`_epts < session\char`_meta.sql}\newline
+
 \newpage
