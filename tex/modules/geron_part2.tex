@@ -548,279 +548,279 @@ Notes:\newline
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{TensorFlow}
+% \subsection{TensorFlow}
 
-Around 95\% of use cases do not require anything other than \texttt{tf.keras} and \texttt{tf.data}.\newline
-These are TensorFlow's high-level APIs.
-But you might need to use the low-level API...\newline
+% Around 95\% of use cases do not require anything other than \texttt{tf.keras} and \texttt{tf.data}.\newline
+% These are TensorFlow's high-level APIs.
+% But you might need to use the low-level API...\newline
 
-\textbf{\underline{TensorFlow Objects and Operations}}
+% \textbf{\underline{TensorFlow Objects and Operations}}
 
-TensorFlow revolves around \textit{tensors}, which \textit{flow} from operation to operation.\newline
-Creating tensors, and using them, is very similar to NumPy:
+% TensorFlow revolves around \textit{tensors}, which \textit{flow} from operation to operation.\newline
+% Creating tensors, and using them, is very similar to NumPy:
 
-\texttt{import tensorflow as tf}\newline
-\texttt{t = tf.constant([[1., 2., 3.], [4., 5., 6.]])} -- create a tensor.\newline
-\texttt{t = tf.constant(a, dtype=tf.float32)} -- create a tensor from a NumPy array.
+% \texttt{import tensorflow as tf}\newline
+% \texttt{t = tf.constant([[1., 2., 3.], [4., 5., 6.]])} -- create a tensor.\newline
+% \texttt{t = tf.constant(a, dtype=tf.float32)} -- create a tensor from a NumPy array.
 
-\texttt{t[:, 1:]} -- an example of indexing.
+% \texttt{t[:, 1:]} -- an example of indexing.
 
-\texttt{t + 10} -- all sorts of tensor operations are available...\newline
-\texttt{tf.square(t)}\newline
-\texttt{tf.reduce\char`_mean(t)}\newline
-\texttt{t @ tf.transpose(t)}
+% \texttt{t + 10} -- all sorts of tensor operations are available...\newline
+% \texttt{tf.square(t)}\newline
+% \texttt{tf.reduce\char`_mean(t)}\newline
+% \texttt{t @ tf.transpose(t)}
 
-\texttt{t.dtype} -- note that TensforFlow uses 32-bit floats by default (NumPy uses 64-bit precision).\newline
-Also note that TensorFlow does not perform any type conversions automatically.
+% \texttt{t.dtype} -- note that TensforFlow uses 32-bit floats by default (NumPy uses 64-bit precision).\newline
+% Also note that TensorFlow does not perform any type conversions automatically.
 
-TensorFlow supports several other data structures:\newline
-Variables, sparse tensors, tensor arrays, ragged tensors, string tensors, sets, queues...\newline
+% TensorFlow supports several other data structures:\newline
+% Variables, sparse tensors, tensor arrays, ragged tensors, string tensors, sets, queues...\newline
 
-\textbf{\underline{Computing Gradients Using Autodiff}}
+% \textbf{\underline{Computing Gradients Using Autodiff}}
 
-Use autodiff to efficiently compute gradients. E.g this simple toy function at \texttt{(w1,w2)=(5,3)}.\newline
-\texttt{def f(w1, w2):}\newline
-\texttt{.~~~return 3*w1**2 + 2*w1*w2}\newline
-\texttt{}\newline
-\texttt{w1, w2 = tf.Variable(5.), tf.Variable(3.)}\newline
-\texttt{with tf.GradientTape() as tape:}\newline
-\texttt{.~~~z = f(w1, w2)}\newline
-\texttt{gradients = tape.gradient(z, [w1, w2])}
+% Use autodiff to efficiently compute gradients. E.g this simple toy function at \texttt{(w1,w2)=(5,3)}.\newline
+% \texttt{def f(w1, w2):}\newline
+% \texttt{.~~~return 3*w1**2 + 2*w1*w2}\newline
+% \texttt{}\newline
+% \texttt{w1, w2 = tf.Variable(5.), tf.Variable(3.)}\newline
+% \texttt{with tf.GradientTape() as tape:}\newline
+% \texttt{.~~~z = f(w1, w2)}\newline
+% \texttt{gradients = tape.gradient(z, [w1, w2])}
 
-The GradientTape records every operation that involves a Variable data structure.\newline
-To save memory, only put the strict minimum inside the tape block.\newline
-The tape is automatically erased immediately after you call its \texttt{gradient()} method.\newline
+% The GradientTape records every operation that involves a Variable data structure.\newline
+% To save memory, only put the strict minimum inside the tape block.\newline
+% The tape is automatically erased immediately after you call its \texttt{gradient()} method.\newline
 
-\textbf{\underline{Customizing Keras Models}}
+% \textbf{\underline{Customizing Keras Models}}
 
-Using TensorFlow's low-level API you can build custom:
-% 
-\vspace{-5.0mm}
-\begin{itemize}
-\item
-Loss functions.
-\vspace{-3.0mm}
-\item
-Activation functions.
-\vspace{-3.0mm}
-\item
-Initializers.
-\vspace{-3.0mm}
-\item
-Regularizers.
-\vspace{-3.0mm}
-\item
-Layers and Models.
-\end{itemize}
+% Using TensorFlow's low-level API you can build custom:
+% % 
+% \vspace{-5.0mm}
+% \begin{itemize}
+% \item
+% Loss functions.
+% \vspace{-3.0mm}
+% \item
+% Activation functions.
+% \vspace{-3.0mm}
+% \item
+% Initializers.
+% \vspace{-3.0mm}
+% \item
+% Regularizers.
+% \vspace{-3.0mm}
+% \item
+% Layers and Models.
+% \end{itemize}
 
-\newpage
-For better performance,
-you should only use vectorized TensorFlow operations.\newline
+% \newpage
+% For better performance,
+% you should only use vectorized TensorFlow operations.\newline
 
-\textbf{\underline{Custom Loss Functions}}
+% \textbf{\underline{Custom Loss Functions}}
 
-\texttt{def my\char`_huber(y\char`_true, y\char`_pred):\newline
-.~~~error = y\char`_true - y\char`_pred\newline
-.~~~is\char`_small\char`_error = tf.abs(error) < 1\newline
-.~~~squared\char`_loss = tf.square(error) / 2\newline
-.~~~linear\char`_loss = tf.abs(error) - 0.5\newline
-.~~~return tf.where(is\char`_small\char`_error, squared\char`_loss, linear\char`_loss)\newline
-...\newline
-model.compile(loss=my\char`_huber, optimizer=\textquotesingle adam\textquotesingle)\newline
-...\newline
-model.save(\textquotesingle my\char`_custom\char`_model.h5\textquotesingle)\newline
-model = keras.models.load\char`_model(\textquotesingle my\char`_custom\char`_model.h5\textquotesingle,\newline
-.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~custom\char`_objects=\{\textquotesingle my\char`_huber\textquotesingle:my\char`_huber\})}\newline
+% \texttt{def my\char`_huber(y\char`_true, y\char`_pred):\newline
+% .~~~error = y\char`_true - y\char`_pred\newline
+% .~~~is\char`_small\char`_error = tf.abs(error) < 1\newline
+% .~~~squared\char`_loss = tf.square(error) / 2\newline
+% .~~~linear\char`_loss = tf.abs(error) - 0.5\newline
+% .~~~return tf.where(is\char`_small\char`_error, squared\char`_loss, linear\char`_loss)\newline
+% ...\newline
+% model.compile(loss=my\char`_huber, optimizer=\textquotesingle adam\textquotesingle)\newline
+% ...\newline
+% model.save(\textquotesingle my\char`_custom\char`_model.h5\textquotesingle)\newline
+% model = keras.models.load\char`_model(\textquotesingle my\char`_custom\char`_model.h5\textquotesingle,\newline
+% .~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~custom\char`_objects=\{\textquotesingle my\char`_huber\textquotesingle:my\char`_huber\})}\newline
 
-If your custom loss function requires an argument,
-you need to create a subclass of \texttt{keras.losses.Loss}
-The \texttt{get\char`_config()} method allows the function argument value to be saved.
+% If your custom loss function requires an argument,
+% you need to create a subclass of \texttt{keras.losses.Loss}
+% The \texttt{get\char`_config()} method allows the function argument value to be saved.
 
 
-\texttt{class MyHuberLoss(keras.losses.Loss):\newline
-.~~~def \char`_\char`_init\char`_\char`_(self, threshold=1.0, **kwargs):\newline
-.~~~~~~~self.threshold = threshold\newline
-.~~~~~~~super().\char`_\char`_init\char`_\char`_(**kwargs)\newline
-.~~~def call(self, y\char`_true, y\char`_pred):\newline
-.~~~~~~~error = y\char`_true - y\char`_pred\newline
-.~~~~~~~is\char`_small\char`_error = tf.abs(error) < self.threshold\newline
-.~~~~~~~squared\char`_loss = tf.square(error)/2\newline
-.~~~~~~~lin\char`_loss  = self.threshold*tf.abs(error) - self.threshold**2/2\newline
-.~~~~~~~return tf.where(is\char`_small\char`_error, squared\char`_loss, lin\char`_loss)\newline
-.~~~def get\char`_config(self):\newline
-.~~~~~~~base\char`_config = super().get\char`_config()\newline
-.~~~~~~~return \{**base\char`_config, \textquotesingle threshold\textquotesingle:self.threshold\}\newline
-...\newline
-model.compile(loss=MyHuberLoss(2.), optimizer=\textquotesingle adam\textquotesingle)\newline
-...\newline
-model.save(\textquotesingle my\char`_custom\char`_model.h5\textquotesingle)\newline
-model = keras.models.load\char`_model(\textquotesingle my\char`_custom\char`_model.h5\textquotesingle,\newline
-.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~custom\char`_objects=\{\textquotesingle MyHuberLoss\textquotesingle:MyHuberLoss\})}
-\newpage
+% \texttt{class MyHuberLoss(keras.losses.Loss):\newline
+% .~~~def \char`_\char`_init\char`_\char`_(self, threshold=1.0, **kwargs):\newline
+% .~~~~~~~self.threshold = threshold\newline
+% .~~~~~~~super().\char`_\char`_init\char`_\char`_(**kwargs)\newline
+% .~~~def call(self, y\char`_true, y\char`_pred):\newline
+% .~~~~~~~error = y\char`_true - y\char`_pred\newline
+% .~~~~~~~is\char`_small\char`_error = tf.abs(error) < self.threshold\newline
+% .~~~~~~~squared\char`_loss = tf.square(error)/2\newline
+% .~~~~~~~lin\char`_loss  = self.threshold*tf.abs(error) - self.threshold**2/2\newline
+% .~~~~~~~return tf.where(is\char`_small\char`_error, squared\char`_loss, lin\char`_loss)\newline
+% .~~~def get\char`_config(self):\newline
+% .~~~~~~~base\char`_config = super().get\char`_config()\newline
+% .~~~~~~~return \{**base\char`_config, \textquotesingle threshold\textquotesingle:self.threshold\}\newline
+% ...\newline
+% model.compile(loss=MyHuberLoss(2.), optimizer=\textquotesingle adam\textquotesingle)\newline
+% ...\newline
+% model.save(\textquotesingle my\char`_custom\char`_model.h5\textquotesingle)\newline
+% model = keras.models.load\char`_model(\textquotesingle my\char`_custom\char`_model.h5\textquotesingle,\newline
+% .~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~custom\char`_objects=\{\textquotesingle MyHuberLoss\textquotesingle:MyHuberLoss\})}
+% \newpage
 
-\textbf{\underline{Custom Activation Functions, Initializers, and Regularizers}}
+% \textbf{\underline{Custom Activation Functions, Initializers, and Regularizers}}
 
-\texttt{def my\char`_softplus(z):\newline
-.~~~return tf.math.log(tf.exp(z) + 1.0)}
+% \texttt{def my\char`_softplus(z):\newline
+% .~~~return tf.math.log(tf.exp(z) + 1.0)}
 
-\texttt{def my\char`_glorot\char`_initializer(shape, dtype=tf.float32):\newline
-.~~~stddev = tf.sqrt(2.~/ (shape[0] + shape[1]))\newline
-.~~~return tf.random.normal(shape, stddev=stddev, dtype=dtype)}
+% \texttt{def my\char`_glorot\char`_initializer(shape, dtype=tf.float32):\newline
+% .~~~stddev = tf.sqrt(2.~/ (shape[0] + shape[1]))\newline
+% .~~~return tf.random.normal(shape, stddev=stddev, dtype=dtype)}
 
-\texttt{def my\char`_l1\char`_regularizer(weights):\newline
-.~~~return tf.reduce\char`_sum(tf.abs(0.01 * weights))}
+% \texttt{def my\char`_l1\char`_regularizer(weights):\newline
+% .~~~return tf.reduce\char`_sum(tf.abs(0.01 * weights))}
 
-\texttt{layer = keras.layers.Dense(100,\newline
-.~~~~~~~~~~~~~~~~~~~~~~~~~~activation=my\char`_softplus,\newline
-.~~~~~~~~~~~~~~~~~~~~~~~~~~kernel\char`_regularizer=my\char`_l1\char`_regularizer,\newline
-.~~~~~~~~~~~~~~~~~~~~~~~~~~kernel\char`_initializer=my\char`_glorot\char`_initializer)}
+% \texttt{layer = keras.layers.Dense(100,\newline
+% .~~~~~~~~~~~~~~~~~~~~~~~~~~activation=my\char`_softplus,\newline
+% .~~~~~~~~~~~~~~~~~~~~~~~~~~kernel\char`_regularizer=my\char`_l1\char`_regularizer,\newline
+% .~~~~~~~~~~~~~~~~~~~~~~~~~~kernel\char`_initializer=my\char`_glorot\char`_initializer)}
 
-\texttt{...\newline
-model.save(\textquotesingle my\char`_custom\char`_model.h5\textquotesingle)\newline
-model = keras.models.load\char`_model(\newline
-.~~~\textquotesingle my\char`_custom\char`_model.h5\textquotesingle,\newline
-.~~~custom\char`_objects=\{\newline
-.~~~~~~~\textquotesingle my\char`_softplus\textquotesingle:~my\char`_softplus,\newline
-.~~~~~~~\textquotesingle my\char`_l1\char`_regularizer\textquotesingle:~my\char`_l1\char`_regularizer,\newline
-.~~~~~~~\textquotesingle my\char`_glorot\char`_initializer\textquotesingle:~my\char`_glorot\char`_initializer\newline
-.~~~\})\newline
-}\newline
+% \texttt{...\newline
+% model.save(\textquotesingle my\char`_custom\char`_model.h5\textquotesingle)\newline
+% model = keras.models.load\char`_model(\newline
+% .~~~\textquotesingle my\char`_custom\char`_model.h5\textquotesingle,\newline
+% .~~~custom\char`_objects=\{\newline
+% .~~~~~~~\textquotesingle my\char`_softplus\textquotesingle:~my\char`_softplus,\newline
+% .~~~~~~~\textquotesingle my\char`_l1\char`_regularizer\textquotesingle:~my\char`_l1\char`_regularizer,\newline
+% .~~~~~~~\textquotesingle my\char`_glorot\char`_initializer\textquotesingle:~my\char`_glorot\char`_initializer\newline
+% .~~~\})\newline
+% }\newline
 
-\textbf{\underline{Custom Layers}}
+% \textbf{\underline{Custom Layers}}
 
-% If you want an exotic layer for which TensorFlow does not provide a default implementation...
+% % If you want an exotic layer for which TensorFlow does not provide a default implementation...
 
-Custom layers without weights can be easily created.
-E.g. exp function applied to each input:\newline
-\texttt{exponential\char`_layer = keras.layers.Lambda(lambda x:~tf.exp(x))}\newline
+% Custom layers without weights can be easily created.
+% E.g. exp function applied to each input:\newline
+% \texttt{exponential\char`_layer = keras.layers.Lambda(lambda x:~tf.exp(x))}\newline
 
-The following custom layer puts the input through a series of dense layers,
-and then adds this output to the original input (an example of a ResidualBlock layer):
+% The following custom layer puts the input through a series of dense layers,
+% and then adds this output to the original input (an example of a ResidualBlock layer):
 
-\texttt{class ResidualBlock(keras.layers.Layer):\newline
-.~~~def \char`_\char`_init\char`_\char`_(self, n\char`_layers, n\char`_neurons, **kwargs):\newline
-.~~~~~~~super().\char`_\char`_init\char`_\char`_(**kwargs)\newline
-.~~~~~~~self.hidden = [keras.layers.Dense(n\char`_neurons, activation=\textquotesingle elu\textquotesingle)\newline
-.~~~~~~~~~~~~~~~~~~~~~~for \char`_~in range(n\char`_layers)]}
+% \texttt{class ResidualBlock(keras.layers.Layer):\newline
+% .~~~def \char`_\char`_init\char`_\char`_(self, n\char`_layers, n\char`_neurons, **kwargs):\newline
+% .~~~~~~~super().\char`_\char`_init\char`_\char`_(**kwargs)\newline
+% .~~~~~~~self.hidden = [keras.layers.Dense(n\char`_neurons, activation=\textquotesingle elu\textquotesingle)\newline
+% .~~~~~~~~~~~~~~~~~~~~~~for \char`_~in range(n\char`_layers)]}
 
-\texttt{.~~~def call(self, inputs):\newline
-.~~~~~~~Z = inputs\newline
-.~~~~~~~for layer in self.hidden:\newline
-.~~~~~~~~~~~Z = layer(Z)\newline
-.~~~~~~~return inputs + Z}
+% \texttt{.~~~def call(self, inputs):\newline
+% .~~~~~~~Z = inputs\newline
+% .~~~~~~~for layer in self.hidden:\newline
+% .~~~~~~~~~~~Z = layer(Z)\newline
+% .~~~~~~~return inputs + Z}
 
-\newpage
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{TensorFlow: Data API}
+% \newpage
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{TensorFlow: Data API}
 
-Deep Learning systems are often trained on very large datasets that will not fit into RAM.\newline
-Thankfully, TensorFlow's Data API can ingest large datasets and preprocess them efficiently...\newline
+% Deep Learning systems are often trained on very large datasets that will not fit into RAM.\newline
+% Thankfully, TensorFlow's Data API can ingest large datasets and preprocess them efficiently...\newline
 
-\textbf{\underline{Transformations \& Shuffling}}\newline
-Create a (dummy) dataset from a tensor:\newline
-\texttt{X = tf.range(200)}\newline
-\texttt{dataset = tf.data.Dataset.from\char`_tensor\char`_slices(X)}
+% \textbf{\underline{Transformations \& Shuffling}}\newline
+% Create a (dummy) dataset from a tensor:\newline
+% \texttt{X = tf.range(200)}\newline
+% \texttt{dataset = tf.data.Dataset.from\char`_tensor\char`_slices(X)}
 
-Transform the dataset items:\newline
-\texttt{dataset = dataset.map(lambda x:~x * 2)}
+% Transform the dataset items:\newline
+% \texttt{dataset = dataset.map(lambda x:~x * 2)}
 
-Shuffle the dataset items:\newline
-\texttt{dataset = dataset.shuffle(buffer\char`_size=10, seed=42)}\newline
-- Loads the first $n$ items into memory.\newline
-- Randomly selects one item from the buffer.\newline
-- Replaces the selected item with a fresh one from the source dataset.\newline
-- Iterates through the entire source dataset.\newline
-- \textit{Ideally, the buffer-size would be equal to the dataset size, but you might be limited by RAM.}
+% Shuffle the dataset items:\newline
+% \texttt{dataset = dataset.shuffle(buffer\char`_size=10, seed=42)}\newline
+% - Loads the first $n$ items into memory.\newline
+% - Randomly selects one item from the buffer.\newline
+% - Replaces the selected item with a fresh one from the source dataset.\newline
+% - Iterates through the entire source dataset.\newline
+% - \textit{Ideally, the buffer-size would be equal to the dataset size, but you might be limited by RAM.}
 
-Group the dataset items into batches:\newline
-\texttt{dataset = dataset.batch(32, drop\char`_remainder=True)}
+% Group the dataset items into batches:\newline
+% \texttt{dataset = dataset.batch(32, drop\char`_remainder=True)}
 
-Look at a few items in a dataset:\newline
-\texttt{for item in dataset.take(5):~print(item)}\newline
+% Look at a few items in a dataset:\newline
+% \texttt{for item in dataset.take(5):~print(item)}\newline
 
-\textbf{\underline{Reading from CSV}}\newline
-This only points to the data, it does not load it (i.e.~if the path does not exist, it will not crash).\newline
-Each item will just be a string corresponding to a line of the CSV:\newline
-\texttt{dataset = tf.data.TextLineDataset(\textquotesingle path/to/data.csv\textquotesingle).skip(1)}
+% \textbf{\underline{Reading from CSV}}\newline
+% This only points to the data, it does not load it (i.e.~if the path does not exist, it will not crash).\newline
+% Each item will just be a string corresponding to a line of the CSV:\newline
+% \texttt{dataset = tf.data.TextLineDataset(\textquotesingle path/to/data.csv\textquotesingle).skip(1)}
 
-Dummy CSV meta data:\newline
-\texttt{n\char`_inputs = 7}\newline
-\texttt{X\char`_mean = tf.constant(np.zeros(7), dtype=tf.float32)}\newline
-\texttt{X\char`_std = tf.constant(np.ones(7), dtype=tf.float32)}
+% Dummy CSV meta data:\newline
+% \texttt{n\char`_inputs = 7}\newline
+% \texttt{X\char`_mean = tf.constant(np.zeros(7), dtype=tf.float32)}\newline
+% \texttt{X\char`_std = tf.constant(np.ones(7), dtype=tf.float32)}
 
-Parse and scale the CSV data:\newline
-\texttt{def preprocess(line):\newline
-.~~~defs = [0.]~* n\char`_inputs + [tf.constant([], dtype=tf.float32)]\newline
-.~~~fields = tf.io.decode\char`_csv(line, record\char`_defaults=defs)\newline
-.~~~x = tf.stack(fields[:-1])\newline
-.~~~y = tf.stack(fields[-1:])\newline
-.~~~return (x - X\char`_mean) / X\char`_std, y}
+% Parse and scale the CSV data:\newline
+% \texttt{def preprocess(line):\newline
+% .~~~defs = [0.]~* n\char`_inputs + [tf.constant([], dtype=tf.float32)]\newline
+% .~~~fields = tf.io.decode\char`_csv(line, record\char`_defaults=defs)\newline
+% .~~~x = tf.stack(fields[:-1])\newline
+% .~~~y = tf.stack(fields[-1:])\newline
+% .~~~return (x - X\char`_mean) / X\char`_std, y}
 
-\texttt{dataset = dataset.map(preprocess)}
+% \texttt{dataset = dataset.map(preprocess)}
 
-And then the rest...\newline
-\texttt{dataset = dataset.shuffle(10000).batch(32).prefetch(1)}\newline
-Prefetch: the dataset will work on preparing batch $n+1$ whilst training on batch $n$.
+% And then the rest...\newline
+% \texttt{dataset = dataset.shuffle(10000).batch(32).prefetch(1)}\newline
+% Prefetch: the dataset will work on preparing batch $n+1$ whilst training on batch $n$.
 
-\newpage
-\textbf{\underline{Preprocessing Input Features}}\newline
-Include a preprocessing layer directly in your model:\newline
-\texttt{class Standardization(keras.layers.Layer):\newline
-.~~~def adapt(self, data\char`_sample):\newline
-.~~~~~~~self.means = np.mean(data\char`_sample, axis=0, keepdims=True)\newline
-.~~~~~~~self.stds = np.std(data\char`_sample, axis=0, keepdims=True)\newline
-.~~~def call(self, inputs):\newline
-.~~~~~~~return (inputs-self.means)/(self.stds+keras.backend.epsilon())}
+% \newpage
+% \textbf{\underline{Preprocessing Input Features}}\newline
+% Include a preprocessing layer directly in your model:\newline
+% \texttt{class Standardization(keras.layers.Layer):\newline
+% .~~~def adapt(self, data\char`_sample):\newline
+% .~~~~~~~self.means = np.mean(data\char`_sample, axis=0, keepdims=True)\newline
+% .~~~~~~~self.stds = np.std(data\char`_sample, axis=0, keepdims=True)\newline
+% .~~~def call(self, inputs):\newline
+% .~~~~~~~return (inputs-self.means)/(self.stds+keras.backend.epsilon())}
 
-\texttt{std\char`_layer = Standardization()\newline
-std\char`_layer.adapt(data\char`_sample)}
+% \texttt{std\char`_layer = Standardization()\newline
+% std\char`_layer.adapt(data\char`_sample)}
 
-\texttt{model = keras.Sequential()\newline
-model.add(std\char`_layer) \# and then continue as normal...}\newline
+% \texttt{model = keras.Sequential()\newline
+% model.add(std\char`_layer) \# and then continue as normal...}\newline
 
-\textbf{\underline{Encode Categorical Features Using One-Hot Vectors}}\newline
-First, define the \textit{vocabulary} (the list of all possible categories)\newline
-and create a tensor with the corresponding indices:\newline
-\texttt{vocab = [\textquotesingle <1H OCEAN\textquotesingle, \textquotesingle INLAND\textquotesingle, \textquotesingle NEAR OCEAN\textquotesingle, \textquotesingle ISLAND\textquotesingle]}\newline
-\texttt{indices = tf.range(len(vocab), dtype=tf.int64)}
+% \textbf{\underline{Encode Categorical Features Using One-Hot Vectors}}\newline
+% First, define the \textit{vocabulary} (the list of all possible categories)\newline
+% and create a tensor with the corresponding indices:\newline
+% \texttt{vocab = [\textquotesingle <1H OCEAN\textquotesingle, \textquotesingle INLAND\textquotesingle, \textquotesingle NEAR OCEAN\textquotesingle, \textquotesingle ISLAND\textquotesingle]}\newline
+% \texttt{indices = tf.range(len(vocab), dtype=tf.int64)}
 
-Next, create a lookup table.
-This includes \textit{out-of-vocabulary} (oov) buckets:\newline
-\texttt{table\char`_init = tf.lookup.KeyValueTensorInitializer(vocab, indices)\newline
-num\char`_oov\char`_buckets = 2\newline
-table = tf.lookup.StaticVocabularyTable(table\char`_init, num\char`_oov\char`_buckets)}
+% Next, create a lookup table.
+% This includes \textit{out-of-vocabulary} (oov) buckets:\newline
+% \texttt{table\char`_init = tf.lookup.KeyValueTensorInitializer(vocab, indices)\newline
+% num\char`_oov\char`_buckets = 2\newline
+% table = tf.lookup.StaticVocabularyTable(table\char`_init, num\char`_oov\char`_buckets)}
 
-Use the lookup table to encode a small batch of categorical features to one-hot vectors:\newline
-\texttt{categories = tf.constant([\textquotesingle NEAR OCEAN\textquotesingle, \textquotesingle DESERT\textquotesingle, \textquotesingle INLAND\textquotesingle, \textquotesingle NOMAD\textquotesingle])\newline
-cat\char`_indices = table.lookup(categories)\newline
-cat\char`_one\char`_hot = tf.one\char`_hot(cat\char`_indices, depth=len(vocab) + num\char`_oov\char`_buckets)}\newline
+% Use the lookup table to encode a small batch of categorical features to one-hot vectors:\newline
+% \texttt{categories = tf.constant([\textquotesingle NEAR OCEAN\textquotesingle, \textquotesingle DESERT\textquotesingle, \textquotesingle INLAND\textquotesingle, \textquotesingle NOMAD\textquotesingle])\newline
+% cat\char`_indices = table.lookup(categories)\newline
+% cat\char`_one\char`_hot = tf.one\char`_hot(cat\char`_indices, depth=len(vocab) + num\char`_oov\char`_buckets)}\newline
 
-\textbf{\underline{Encode Categorical Features Using Embeddings}}\newline
-An embedding is a trainable dense vector that represents a category.
-By default, embeddings are initialized randomly.
-As training progresses, the co-ordinates begin to \textit{represent} something.
+% \textbf{\underline{Encode Categorical Features Using Embeddings}}\newline
+% An embedding is a trainable dense vector that represents a category.
+% By default, embeddings are initialized randomly.
+% As training progresses, the co-ordinates begin to \textit{represent} something.
 
-Create an \textit{embedding matrix} containing each category's embedding, initialized randomly:\newline
-\texttt{embedding\char`_dim = 2 \# this hyperparameter needs to be tuned\newline
-embedding = keras.layers.Embedding(input\char`_dim=len(vocab)+num\char`_oov\char`_buckets,\newline
-.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~output\char`_dim=embedding\char`_dim)}
+% Create an \textit{embedding matrix} containing each category's embedding, initialized randomly:\newline
+% \texttt{embedding\char`_dim = 2 \# this hyperparameter needs to be tuned\newline
+% embedding = keras.layers.Embedding(input\char`_dim=len(vocab)+num\char`_oov\char`_buckets,\newline
+% .~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~output\char`_dim=embedding\char`_dim)}
 
-Using the Functional API, create a Keras model that can process categorical features
-(along with regular numerical features)
-and learn an embedding for each category (and each oov bucket):\newline
-\texttt{regular\char`_inputs = keras.layers.Input(shape=[8])\newline
-cats = keras.layers.Input(shape=[], dtype=tf.string)\newline
-cat\char`_indices = keras.layers.Lambda(lambda x:~table.lookup(x))(cats)\newline
-cat\char`_embed = keras.layers.Embedding(input\char`_dim=6, output\char`_dim=2)(cat\char`_indices)\newline
-encoded\char`_inputs = keras.layers.concatenate([regular\char`_inputs, cat\char`_embed])\newline
-outputs = keras.layers.Dense(1)(encoded\char`_inputs) \# trivial model\newline
-model = keras.models.Model(inputs=[regular\char`_inputs,cats], outputs=[outputs])}
+% Using the Functional API, create a Keras model that can process categorical features
+% (along with regular numerical features)
+% and learn an embedding for each category (and each oov bucket):\newline
+% \texttt{regular\char`_inputs = keras.layers.Input(shape=[8])\newline
+% cats = keras.layers.Input(shape=[], dtype=tf.string)\newline
+% cat\char`_indices = keras.layers.Lambda(lambda x:~table.lookup(x))(cats)\newline
+% cat\char`_embed = keras.layers.Embedding(input\char`_dim=6, output\char`_dim=2)(cat\char`_indices)\newline
+% encoded\char`_inputs = keras.layers.concatenate([regular\char`_inputs, cat\char`_embed])\newline
+% outputs = keras.layers.Dense(1)(encoded\char`_inputs) \# trivial model\newline
+% model = keras.models.Model(inputs=[regular\char`_inputs,cats], outputs=[outputs])}
 
-\newpage
+% \newpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
