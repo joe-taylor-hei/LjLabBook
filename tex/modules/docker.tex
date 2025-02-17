@@ -108,12 +108,13 @@ Note that Podman uses a VM when running on MacOS. You need to ensure that this V
 
 \texttt{podman machine stop}\newline
 \texttt{podman machine rm} \enspace ...or if the machine won't stop,\; \texttt{podman machine rm -f}\newline
-\texttt{podman machine init --memory=8192}\newline
+\texttt{podman machine init --cpus=1 --memory=8192}\newline
 \texttt{podman machine start}\newline
 \texttt{podman machine inspect}
 
 Building and running:\newline
 \texttt{podman build --tag ds-batch-job .}\newline
+\texttt{aws configure sso}\newline
 \texttt{podman run  -v \$HOME/.aws:/root/.aws:ro ds-batch-job <GAMEWEEK>}
 
 Debugging:\newline
