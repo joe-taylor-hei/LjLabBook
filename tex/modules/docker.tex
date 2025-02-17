@@ -89,13 +89,38 @@ RUN pip3 install -r requirements.txt\newline
 \# execute python script\newline
 CMD ["python", "app.py"]}\newline
 
-\textbf{requirements.txt}\newline
-\texttt{numpy==1.20.3}\newline
+% \textbf{requirements.txt}\newline
+% \texttt{numpy==1.20.3}\newline
 
-\textbf{app.py}\newline
-\texttt{import numpy as np\newline
-v = np.array([1,2,3])\newline
-print(v)\newline
-print(\textquotesingle Wahooo\textquotesingle)}
+% \textbf{app.py}\newline
+% \texttt{import numpy as np\newline
+% v = np.array([1,2,3])\newline
+% print(v)\newline
+% print(\textquotesingle Wahooo\textquotesingle)}
+
+\subsection{Podman}
+
+Podman is very similar to Docker, but it is more secure and lightweight.
+In the command line, you can often just swap the \texttt{docker} part of a command to \texttt{podman}.
+
+Note that Podman uses a VM when running on MacOS. You need to ensure that this VM is set up correctly.
+\textbf{Removing the VM also helps prevent Podman claiming all your disk space!}
+
+\texttt{podman machine stop}\newline
+\texttt{podman machine rm} \enspace ...or if the machine won't stop,\; \texttt{podman machine rm -f}\newline
+\texttt{podman machine init --memory=8192}\newline
+\texttt{podman machine start}\newline
+\texttt{podman machine inspect}
+
+Building and running:\newline
+\texttt{podman build --tag ds-batch-job .}\newline
+\texttt{podman run  -v \$HOME/.aws:/root/.aws:ro ds-batch-job <GAMEWEEK>}
+
+Debugging:\newline
+\textit{Note that print statements are not returned locally until the container finishes.}\newline
+\texttt{podman ps -a}\newline
+\texttt{podman stats} (whilst container is running)\newline
+\texttt{podman inspect <CONTAINER-ID>}\newline
+\texttt{podman exec -it <CONTAINER-ID> /bin/bash}\newline
 
 \newpage
