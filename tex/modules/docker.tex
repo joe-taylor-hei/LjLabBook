@@ -113,9 +113,9 @@ Note that Podman uses a VM when running on MacOS. You need to ensure that this V
 \texttt{podman machine inspect}
 
 Building and running:\newline
-\texttt{podman build --tag ds-batch-job .}\newline
+\texttt{podman build --tag batch-job:latest .}\newline
 \texttt{aws configure sso}\newline
-\texttt{podman run  -v \$HOME/.aws:/root/.aws:ro ds-batch-job <GAMEWEEK>}
+\texttt{podman run  -v \$HOME/.aws:/root/.aws:ro batch-job:latest <GAMEWEEK>}
 
 Debugging:\newline
 \textit{Note that print statements are not returned locally until the container finishes.}\newline
