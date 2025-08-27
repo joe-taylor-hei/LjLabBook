@@ -120,6 +120,7 @@ Environment Variables And Loops:
 & \texttt{myvar=123abc} -- example of declaring a variable (string only).
 & \texttt{echo \$myvar} -- example of using variable.
 & \texttt{for myvar in *.pdf; do ls \$myvar; echo; done} \newline-- specific example of for loop.
+& \texttt{for bson in *.bytes; do mv \$bson \${bson:0:15}.bson; done}
 & \texttt{while true; do <command1>; <command2>; etc; done} \newline-- run a command periodically.
 & \texttt{alias <shortcut>="<regularExpression>"} -- alias commands.
 & \texttt{source <shell file>} -- evaluates the file.
